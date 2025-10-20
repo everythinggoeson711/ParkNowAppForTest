@@ -570,6 +570,91 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                     IsRating = true,
                     UserId = 5,
                     VehicleInforId = 1
+                },
+                // Seed data for testing GET /api/customer-booking/upcomming
+                new Booking
+                {
+                    BookingId = 2,
+                    StartTime = new DateTime(2025, 11, 15, 9, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 11, 15, 11, 0, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 11, 14, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Initial",
+                    GuestName = "Pham Thi D",
+                    GuestPhone = "0123456785",
+                    TotalPrice = 20000m,
+                    QRImage = "https://via.placeholder.com/150",
+                    UnPaidMoney = 0m,
+                    IsRating = false,
+                    UserId = 5,
+                    VehicleInforId = 1
+                },
+                new Booking
+                {
+                    BookingId = 3,
+                    StartTime = new DateTime(2025, 11, 16, 14, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 11, 16, 16, 0, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 11, 15, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Success",
+                    GuestName = "Pham Thi D",
+                    GuestPhone = "0123456785",
+                    TotalPrice = 25000m,
+                    QRImage = "https://via.placeholder.com/150",
+                    UnPaidMoney = 0m,
+                    IsRating = false,
+                    UserId = 5,
+                    VehicleInforId = 2
+                },
+                new Booking
+                {
+                    BookingId = 4,
+                    StartTime = new DateTime(2025, 11, 17, 10, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 11, 17, 12, 0, 0, DateTimeKind.Utc),
+                    CheckinTime = new DateTime(2025, 11, 17, 10, 5, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 11, 16, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Check_In",
+                    GuestName = "Pham Thi D",
+                    GuestPhone = "0123456785",
+                    TotalPrice = 15000m,
+                    QRImage = "https://via.placeholder.com/150",
+                    UnPaidMoney = 0m,
+                    IsRating = false,
+                    UserId = 5,
+                    VehicleInforId = 1
+                },
+                // Seed data for testing GET /api/customer-booking/activities
+                new Booking
+                {
+                    BookingId = 5,
+                    StartTime = new DateTime(2025, 10, 10, 8, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 10, 10, 0, 0, DateTimeKind.Utc),
+                    CheckinTime = new DateTime(2025, 10, 10, 8, 5, 0, DateTimeKind.Utc),
+                    CheckoutTime = new DateTime(2025, 10, 10, 10, 2, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 9, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Done",
+                    GuestName = "Pham Thi D",
+                    GuestPhone = "0123456785",
+                    TotalPrice = 30000m,
+                    QRImage = "https://via.placeholder.com/150",
+                    UnPaidMoney = 0m,
+                    IsRating = true,
+                    UserId = 5,
+                    VehicleInforId = 1
+                },
+                new Booking
+                {
+                    BookingId = 6,
+                    StartTime = new DateTime(2025, 10, 12, 14, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 12, 16, 0, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 11, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Cancel",
+                    GuestName = "Pham Thi D",
+                    GuestPhone = "0123456785",
+                    TotalPrice = 0m,
+                    QRImage = "https://via.placeholder.com/150",
+                    UnPaidMoney = 0m,
+                    IsRating = false,
+                    UserId = 5,
+                    VehicleInforId = 2
                 }
             );
 
@@ -580,6 +665,37 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                     BookingDetailsId = 1,
                     TimeSlotId = 1,
                     BookingId = 1
+                },
+                // Link new bookings with existing TimeSlot 2
+                new BookingDetails
+                {
+                    BookingDetailsId = 2,
+                    TimeSlotId = 2,
+                    BookingId = 2
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 3,
+                    TimeSlotId = 2,
+                    BookingId = 3
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 4,
+                    TimeSlotId = 2,
+                    BookingId = 4
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 5,
+                    TimeSlotId = 1,
+                    BookingId = 5
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 6,
+                    TimeSlotId = 1,
+                    BookingId = 6
                 }
             );
 
