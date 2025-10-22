@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Parking.FindingSlotManagement.Application.Contracts.Infrastructure;
 using Parking.FindingSlotManagement.Application.Contracts.Persistence;
+using Parking.FindingSlotManagement.Infrastructure.Cloudinary;
 using Parking.FindingSlotManagement.Infrastructure.Firebase.PushService;
 using Parking.FindingSlotManagement.Infrastructure.Mail;
 using Parking.FindingSlotManagement.Infrastructure.Persistences;
@@ -64,15 +65,34 @@ namespace Parking.FindingSlotManagement.Infrastructure
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IConflictRequestRepository, ConflictRequestRepository>();
             services.AddScoped<IHangfireRepository, HangfireRepository>();
-            FirebaseApp.Create(new AppOptions
+            
+            // Firebase configuration - đường dẫn tương đối từ working directory
+            var firebaseCredentialPath = Path.Combine(AppContext.BaseDirectory, "Firebase", "parknowapp-6cefc-firebase-adminsdk-fbsvc-feeb7ffc25.json");
+            
+            // Fallback: thử đường dẫn khác nếu file không tồn tại
+            if (!File.Exists(firebaseCredentialPath))
             {
-                Credential = GoogleCredential
-                .FromFile(@"..\Parking.FindingSlotManagement.Infrastructure\Firebase\parknowapp-6cefc-firebase-adminsdk-fbsvc-feeb7ffc25.json")
-                //Credential = GoogleCredential.FromFile(@"C:\home\site\wwwroot\Firebase\parkz-f1bd0-firebase-adminsdk-rjod0-8d0ba17bb5.json")
-            });
+                // Thử đường dẫn từ Infrastructure project (development)
+                firebaseCredentialPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Parking.FindingSlotManagement.Infrastructure", "Firebase", "parknowapp-6cefc-firebase-adminsdk-fbsvc-feeb7ffc25.json");
+            }
+            
+            if (File.Exists(firebaseCredentialPath))
+            {
+                FirebaseApp.Create(new AppOptions
+                {
+                    Credential = GoogleCredential.FromFile(firebaseCredentialPath)
+                });
+            }
+            else
+            {
+                // Log warning nhưng không crash app
+                Console.WriteLine($"WARNING: Firebase credential file not found at: {firebaseCredentialPath}");
+                Console.WriteLine("Firebase Push Notification service will not be available.");
+            }
 
             services.AddScoped<IFireBaseMessageServices, FireBaseMessageServices>();
             services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
             return services;
         }
     }

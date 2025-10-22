@@ -16,8 +16,6 @@ using Parking.FindingSlotManagement.Application.Models.PushNotification;
 using Parking.FindingSlotManagement.Domain.Entities;
 using Parking.FindingSlotManagement.Domain.Enum;
 using QRCoder;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
@@ -53,7 +51,7 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
         private readonly ITimeSlotRepository _timeSlotRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IWalletRepository _walletRepository;
-        private readonly HttpClient _client;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public CreateBookingCommandHandler(IBookingRepository bookingRepository,
             IParkingSlotRepository parkingSlotRepository,
@@ -73,7 +71,8 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
             IBookingDetailsRepository bookingDetailsRepository,
             ITimeSlotRepository timeSlotRepository, 
             ITransactionRepository transactionRepository,
-            IWalletRepository walletRepository)
+            IWalletRepository walletRepository,
+            ICloudinaryService cloudinaryService)
         {
             _bookingRepository = bookingRepository;
             _parkingSlotRepository = parkingSlotRepository;
@@ -94,8 +93,7 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
             _timeSlotRepository = timeSlotRepository;
             _transactionRepository = transactionRepository;
             _walletRepository = walletRepository;
-            _client = new HttpClient();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", "886d0b92410e625");
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<ServiceResponse<int>> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
@@ -177,7 +175,17 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                         var isCheck = false;
                         foreach (var item in checkDuplicateLicsene)
                         {
-                            if(item.StartTime >= request.BookingDto.StartTime && item.EndTime >= request.BookingDto.EndTime && checkParking == item.BookingDetails.FirstOrDefault().TimeSlot.Parkingslot.Floor.ParkingId)
+                            // Add null checks for the entire chain to prevent NullReferenceException
+                            var bookingDetail = item.BookingDetails?.FirstOrDefault();
+                            var timeSlot = bookingDetail?.TimeSlot;
+                            var parkingSlot = timeSlot?.Parkingslot;
+                            var floor = parkingSlot?.Floor;
+                            var parkingId = floor?.ParkingId;
+                            
+                            if(item.StartTime >= request.BookingDto.StartTime && 
+                               item.EndTime >= request.BookingDto.EndTime && 
+                               parkingId != null && 
+                               checkParking == parkingId)
                             {
                                 isCheck = true;
                             }
@@ -379,6 +387,8 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
 
             await _timeSlotRepository.Save();
             await _bookingDetailsRepository.AddRange(bookingDetails);
+            // Ensure booking details are persisted before any subsequent reads
+            await _bookingDetailsRepository.Save();
 
             await CreateNewTransaction(paymentMethod, user, entity, expectedPrice);
 
@@ -602,6 +612,8 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
 
             await _timeSlotRepository.Save();
             await _bookingDetailsRepository.AddRange(bookingDetails);
+            // Ensure booking details are persisted before any subsequent reads
+            await _bookingDetailsRepository.Save();
             
             var transaction = new Domain.Entities.Transaction
             {
@@ -723,43 +735,27 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
         }
         private async Task<string> UploadQRImagess(int bookingId)
         {
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            try
+            {
+                // Generate QR code as PNG byte array (no System.Drawing)
+                var qrGenerator = new QRCodeGenerator();
+                var qrCodeData = qrGenerator.CreateQrCode($"pz-{bookingId}", QRCodeGenerator.ECCLevel.Q);
+                var pngQr = new PngByteQRCode(qrCodeData);
+                var qrBytes = pngQr.GetGraphic(20);
 
-            // Generate a QR code with the given data
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("pz-" + bookingId.ToString(), QRCodeGenerator.ECCLevel.Q);
-
-            // Create a QR code object from the QR code data
-            QRCode qrCode = new QRCode(qrCodeData);
-
-            // Convert the QR code to a bitmap image
-            Bitmap qrCodeImage = qrCode.GetGraphic(20);
-            IFormFile file = ConvertToIFormFile(qrCodeImage, "qrCodeImage.jpg");
-            var ms = new MemoryStream();
-            await file.CopyToAsync(ms);
-            var content = new ByteArrayContent(ms.ToArray());
-            /*content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);*/
-            var response = await _client.PostAsync("https://api.imgur.com/3/image", content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<ImgurResponse>(responseContent);
-            return result.Data.Link;
+                // Upload to Cloudinary
+                var imageUrl = await _cloudinaryService.UploadImageAsync(qrBytes, $"qr-{bookingId}.png", "parkz-qrcodes");
+                return imageUrl ?? string.Empty;
+            }
+            catch (Exception ex)
+            {
+                // Don’t fail the booking when upload fails
+                _logger.LogError(ex, "Failed to upload QR code for booking {BookingId}", bookingId);
+                return string.Empty;
+            }
         }
 
-        private IFormFile ConvertToIFormFile(Bitmap bitmap, string fileName)
-        {
-            var stream = new MemoryStream();
 
-            // Save the bitmap to the stream using the desired image format
-            bitmap.Save(stream, ImageFormat.Jpeg);
-
-            // Reset the stream position to the beginning
-            stream.Position = 0;
-
-            // Create an IFormFile from the stream
-            var formFile = new FormFile(stream, 0, stream.Length, "qrCodeImage", fileName);
-
-            return formFile;
-        }
         private async Task CreateNewTransaction(string? paymentMethod, User user, Domain.Entities.Booking entity, decimal expectedPrice)
         {
             var transaction = new Domain.Entities.Transaction

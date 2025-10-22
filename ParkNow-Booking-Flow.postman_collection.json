@@ -1,0 +1,228 @@
+{
+  "info": {
+    "name": "ParkNow Booking Flow",
+    "_postman_id": "c6a0a7b0-4d1d-4b9a-a1e1-parkz-booking-flow",
+    "description": "Postman collection for ParkNow booking flow: auth, discovery, pricing, booking, check-in, details, upcoming, activities, payment method, and cancel.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1) Login - Customer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key":"Content-Type","value":"application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"0902144165\",\n  \"password\": \"admin@@\"\n}"
+        },
+        "url": {
+          "raw": "http://103.56.161.75/api/mobile/customer-authentication/login",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","mobile","customer-authentication","login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2) Parkings - All Active",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "http://103.56.161.75/api/parkings/mobile/all-active?pageNo=1&pageSize=10",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","parkings","mobile","all-active"],
+          "query": [
+            {"key":"pageNo","value":"1"},
+            {"key":"pageSize","value":"10"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "3) Get Available Slots",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/get-available-slots?ParkingId={{parkingId}}&StartTimeBooking={{start}}&DesireHour={{hours}}",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","get-available-slots"],
+          "query": [
+            {"key":"ParkingId","value":"{{parkingId}}"},
+            {"key":"StartTimeBooking","value":"{{start}}"},
+            {"key":"DesireHour","value":"{{hours}}"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "4) Get Expected Price",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/get-expected-price?ParkingId={{parkingId}}&StartimeBooking={{start}}&DesiredHour={{hours}}&TrafficId={{trafficId}}",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","get-expected-price"],
+          "query": [
+            {"key":"ParkingId","value":"{{parkingId}}"},
+            {"key":"StartimeBooking","value":"{{start}}"},
+            {"key":"DesiredHour","value":"{{hours}}"},
+            {"key":"TrafficId","value":"{{trafficId}}"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "5) Create Booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"},
+          {"key":"Content-Type","value":"application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookingDto\": {\n    \"parkingSlotId\": {{slotId}},\n    \"startTime\": \"{{start}}\",\n    \"endTime\": \"{{end}}\",\n    \"dateBook\": \"{{start}}\",\n    \"guestName\": \"Test User\",\n    \"guestPhone\": \"0900000000\",\n    \"paymentMethod\": \"Cash\",\n    \"vehicleInforId\": {{vehicleId}},\n    \"userId\": {{userId}}\n  },\n  \"deviceToKenMobile\": \"test-device\"\n}"
+        },
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking"]
+        }
+      }
+    },
+    {
+      "name": "6) Check-in",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"},
+          {"key":"Content-Type","value":"application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookingId\": {{bookingId}}\n}"
+        },
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/check-in",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","check-in"]
+        }
+      }
+    },
+    {
+      "name": "7) Booking Details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/getbooked-booking-detail?BookingId={{bookingId}}",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","getbooked-booking-detail"],
+          "query": [{"key":"BookingId","value":"{{bookingId}}"}]
+        }
+      }
+    },
+    {
+      "name": "8) Upcoming Bookings",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/upcomming",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","upcomming"]
+        }
+      }
+    },
+    {
+      "name": "9) Activities",
+      "request": {
+        "method": "GET",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"}
+        ],
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/activities",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","activities"]
+        }
+      }
+    },
+    {
+      "name": "10) Update Payment Method",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"},
+          {"key":"Content-Type","value":"application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookingId\": {{bookingId}},\n  \"paymentMethod\": \"Cash\"\n}"
+        },
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/update-payment-method",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","update-payment-method"]
+        }
+      }
+    },
+    {
+      "name": "11) Cancel Booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {"key":"Authorization","value":"Bearer {{token}}"},
+          {"key":"Content-Type","value":"application/json"}
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"bookingId\": {{bookingId}}\n}"
+        },
+        "url": {
+          "raw": "http://103.56.161.75/api/customer-booking/cancel-booking",
+          "protocol": "http",
+          "host": ["103.56.161.75"],
+          "path": ["api","customer-booking","cancel-booking"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {"key":"token","value":""},
+    {"key":"userId","value":"5"},
+    {"key":"parkingId","value":"1"},
+    {"key":"slotId","value":"1"},
+    {"key":"vehicleId","value":"1"},
+    {"key":"bookingId","value":"1"},
+    {"key":"start","value":"2025-10-21T08:00:00Z"},
+    {"key":"end","value":"2025-10-21T10:00:00Z"},
+    {"key":"hours","value":"2"},
+    {"key":"trafficId","value":"1"}
+  ]
+}

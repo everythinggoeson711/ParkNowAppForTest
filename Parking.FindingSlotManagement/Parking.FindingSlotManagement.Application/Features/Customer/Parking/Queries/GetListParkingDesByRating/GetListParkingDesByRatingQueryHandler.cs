@@ -83,16 +83,24 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Parking.Qu
                     foreach (var item2 in lstParkingHasPrice)
                     {
                         var timelineCurrent = await GetTimeLine(item2);
+                        if (timelineCurrent == null)
+                        {
+                            continue; // Skip if no timeline found
+                        }
+                        
                         var parkingPrice = await _parkingPriceRepository.GetById(item2.ParkingPriceId);
+                        if (parkingPrice == null)
+                        {
+                            continue; // Skip if no parking price found
+                        }
+                        
                         if(parkingPrice.TrafficId == 1)
                         {
                             itemAdd.PriceCar = timelineCurrent.Price;
-                            itemAdd.PriceMoto = null;
                         }
                         else if(parkingPrice.TrafficId == 2)
                         {
                             itemAdd.PriceMoto = timelineCurrent.Price;
-                            itemAdd.PriceCar = null;
                         }
                     }
                     lstResponse.Add(itemAdd);

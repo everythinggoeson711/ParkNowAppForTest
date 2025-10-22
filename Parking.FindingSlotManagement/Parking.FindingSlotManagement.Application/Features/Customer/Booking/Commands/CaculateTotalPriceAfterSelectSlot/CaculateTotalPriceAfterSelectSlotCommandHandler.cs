@@ -23,17 +23,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
 
         public async Task<ServiceResponse<decimal>> Handle(CaculateTotalPriceAfterSelectSlotCommand request, CancellationToken cancellationToken)
         {
-
             var startTimeBooking = request.StartimeBooking;
-            var endTimeBooking = request.StartimeBooking
-                .AddHours(request.DesiredHour);
+            var endTimeBooking = request.StartimeBooking.AddHours(request.DesiredHour);
             var currentParkingId = request.ParkingId;
-            
+            var trafficId = request.TrafficId;
 
             try
             {
-                
-
                 List<Expression<Func<ParkingHasPrice, object>>> includes = new List<Expression<Func<ParkingHasPrice, object>>>
                 {
                     x => x.ParkingPrice.TimeLines,
@@ -41,11 +37,44 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
 
                 var parkingHasPrice = await _parkingHasPriceRepository
                     .GetAllItemWithCondition(x => x.Parking.ParkingId == currentParkingId &&
-                    x.ParkingPrice.Traffic.TrafficId == 1, includes); 
+                    x.ParkingPrice.Traffic.TrafficId == trafficId, includes);
 
-                var parkingPrice = parkingHasPrice.FirstOrDefault().ParkingPrice;
+                if (parkingHasPrice == null || !parkingHasPrice.Any())
+                {
+                    return new ServiceResponse<decimal>
+                    {
+                        Data = 0,
+                        Message = "Không tìm thấy giá cho bãi đỗ xe này",
+                        StatusCode = 404,
+                        Success = false,
+                    };
+                }
 
+                var firstParkingHasPrice = parkingHasPrice.FirstOrDefault();
+                if (firstParkingHasPrice?.ParkingPrice == null)
+                {
+                    return new ServiceResponse<decimal>
+                    {
+                        Data = 0,
+                        Message = "Không tìm thấy thông tin giá",
+                        StatusCode = 404,
+                        Success = false,
+                    };
+                }
+
+                var parkingPrice = firstParkingHasPrice.ParkingPrice;
                 var timeLines = parkingPrice.TimeLines;
+
+                if (timeLines == null || !timeLines.Any())
+                {
+                    return new ServiceResponse<decimal>
+                    {
+                        Data = 0,
+                        Message = "Không tìm thấy thông tin giá theo giờ",
+                        StatusCode = 404,
+                        Success = false,
+                    };
+                }
 
                 var expectedPrice = CaculatePriceBooking
                     .CaculateExpectedPrice(startTimeBooking, endTimeBooking, parkingPrice, timeLines);
