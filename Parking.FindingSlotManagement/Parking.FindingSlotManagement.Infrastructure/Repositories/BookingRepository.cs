@@ -488,7 +488,7 @@ namespace Parking.FindingSlotManagement.Infrastructure.Repositories
                                                      .ThenInclude(x => x.Floor)
                                                      .ThenInclude(x => x.Parking)
                                                  .Where(x => x.UserId == userId && 
-                                                       x.Status.Equals(BookingStatus.Initial.ToString()))
+                                                       x.Status.Equals(BookingStatus.Success.ToString()))
                                                  .ToListAsync();
             if (!booking.Any())
             {

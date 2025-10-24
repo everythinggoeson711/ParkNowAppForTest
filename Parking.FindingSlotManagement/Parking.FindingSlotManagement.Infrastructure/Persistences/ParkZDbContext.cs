@@ -530,25 +530,145 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 }
             );
 
-            // Seed TimeSlots
+            // Seed TimeSlots - Cập nhật để có nhiều time slots hơn cho test
             modelBuilder.Entity<TimeSlot>().HasData(
+                // Time slots cho ParkingSlot 1 (Car slot)
                 new TimeSlot
                 {
                     TimeSlotId = 1,
-                    StartTime = new DateTime(2024, 1, 1, 6, 0, 0),
-                    EndTime = new DateTime(2024, 1, 1, 18, 0, 0),
-                    Status = "Active",
-                    CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    StartTime = new DateTime(2025, 10, 25, 6, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 7, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
                     ParkingSlotId = 1
                 },
                 new TimeSlot
                 {
                     TimeSlotId = 2,
-                    StartTime = new DateTime(2024, 1, 1, 18, 0, 0),
-                    EndTime = new DateTime(2024, 1, 2, 6, 0, 0),
-                    Status = "Active",
-                    CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                    StartTime = new DateTime(2025, 10, 25, 7, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 8, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
                     ParkingSlotId = 1
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 3,
+                    StartTime = new DateTime(2025, 10, 25, 8, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 9, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 1
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 4,
+                    StartTime = new DateTime(2025, 10, 25, 9, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 10, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 1
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 5,
+                    StartTime = new DateTime(2025, 10, 25, 10, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 11, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 1
+                },
+                // Time slots cho ParkingSlot 2 (Car slot)
+                new TimeSlot
+                {
+                    TimeSlotId = 6,
+                    StartTime = new DateTime(2025, 10, 25, 6, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 7, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 2
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 7,
+                    StartTime = new DateTime(2025, 10, 25, 7, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 8, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 2
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 8,
+                    StartTime = new DateTime(2025, 10, 25, 8, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 9, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 2
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 9,
+                    StartTime = new DateTime(2025, 10, 25, 9, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 10, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 2
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 10,
+                    StartTime = new DateTime(2025, 10, 25, 10, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 11, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 2
+                },
+                // Time slots cho ParkingSlot 41 (Moto slot)
+                new TimeSlot
+                {
+                    TimeSlotId = 11,
+                    StartTime = new DateTime(2025, 10, 25, 6, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 7, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 41
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 12,
+                    StartTime = new DateTime(2025, 10, 25, 7, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 8, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 41
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 13,
+                    StartTime = new DateTime(2025, 10, 25, 8, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 9, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 41
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 14,
+                    StartTime = new DateTime(2025, 10, 25, 9, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 10, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 41
+                },
+                new TimeSlot
+                {
+                    TimeSlotId = 15,
+                    StartTime = new DateTime(2025, 10, 25, 10, 0, 0),
+                    EndTime = new DateTime(2025, 10, 25, 11, 0, 0),
+                    Status = "Available",
+                    CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                    ParkingSlotId = 41
                 }
             );
 
@@ -557,12 +677,12 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Booking
                 {
                     BookingId = 1,
-                    StartTime = new DateTime(2024, 1, 10, 8, 0, 0, DateTimeKind.Utc),
-                    EndTime = new DateTime(2024, 1, 10, 10, 0, 0, DateTimeKind.Utc),
-                    CheckinTime = new DateTime(2024, 1, 10, 8, 5, 0, DateTimeKind.Utc),
-                    CheckoutTime = new DateTime(2024, 1, 10, 10, 2, 0, DateTimeKind.Utc),
-                    DateBook = new DateTime(2024, 1, 9, 12, 0, 0, DateTimeKind.Utc),
-                    Status = "Completed",
+                    StartTime = new DateTime(2025, 10, 25, 8, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 25, 10, 0, 0, DateTimeKind.Utc),
+                    CheckinTime = new DateTime(2025, 10, 25, 8, 5, 0, DateTimeKind.Utc),
+                    CheckoutTime = new DateTime(2025, 10, 25, 10, 2, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 24, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Done",
                     GuestName = "Pham Thi D",
                     GuestPhone = "0123456785",
                     TotalPrice = 30000m,
@@ -576,10 +696,10 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Booking
                 {
                     BookingId = 2,
-                    StartTime = new DateTime(2025, 11, 15, 9, 0, 0, DateTimeKind.Utc),
-                    EndTime = new DateTime(2025, 11, 15, 11, 0, 0, DateTimeKind.Utc),
-                    DateBook = new DateTime(2025, 11, 14, 12, 0, 0, DateTimeKind.Utc),
-                    Status = "Initial",
+                    StartTime = new DateTime(2025, 10, 30, 9, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 30, 11, 0, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 29, 12, 0, 0, DateTimeKind.Utc),
+                    Status = "Success",
                     GuestName = "Pham Thi D",
                     GuestPhone = "0123456785",
                     TotalPrice = 20000m,
@@ -592,9 +712,9 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Booking
                 {
                     BookingId = 3,
-                    StartTime = new DateTime(2025, 11, 16, 14, 0, 0, DateTimeKind.Utc),
-                    EndTime = new DateTime(2025, 11, 16, 16, 0, 0, DateTimeKind.Utc),
-                    DateBook = new DateTime(2025, 11, 15, 12, 0, 0, DateTimeKind.Utc),
+                    StartTime = new DateTime(2025, 10, 31, 14, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 31, 16, 0, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 30, 12, 0, 0, DateTimeKind.Utc),
                     Status = "Success",
                     GuestName = "Pham Thi D",
                     GuestPhone = "0123456785",
@@ -608,10 +728,10 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Booking
                 {
                     BookingId = 4,
-                    StartTime = new DateTime(2025, 11, 17, 10, 0, 0, DateTimeKind.Utc),
-                    EndTime = new DateTime(2025, 11, 17, 12, 0, 0, DateTimeKind.Utc),
-                    CheckinTime = new DateTime(2025, 11, 17, 10, 5, 0, DateTimeKind.Utc),
-                    DateBook = new DateTime(2025, 11, 16, 12, 0, 0, DateTimeKind.Utc),
+                    StartTime = new DateTime(2025, 10, 28, 10, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 28, 12, 0, 0, DateTimeKind.Utc),
+                    CheckinTime = new DateTime(2025, 10, 28, 10, 5, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 27, 12, 0, 0, DateTimeKind.Utc),
                     Status = "Check_In",
                     GuestName = "Pham Thi D",
                     GuestPhone = "0123456785",
@@ -626,11 +746,11 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Booking
                 {
                     BookingId = 5,
-                    StartTime = new DateTime(2025, 10, 10, 8, 0, 0, DateTimeKind.Utc),
-                    EndTime = new DateTime(2025, 10, 10, 10, 0, 0, DateTimeKind.Utc),
-                    CheckinTime = new DateTime(2025, 10, 10, 8, 5, 0, DateTimeKind.Utc),
-                    CheckoutTime = new DateTime(2025, 10, 10, 10, 2, 0, DateTimeKind.Utc),
-                    DateBook = new DateTime(2025, 10, 9, 12, 0, 0, DateTimeKind.Utc),
+                    StartTime = new DateTime(2025, 10, 20, 8, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 20, 10, 0, 0, DateTimeKind.Utc),
+                    CheckinTime = new DateTime(2025, 10, 20, 8, 5, 0, DateTimeKind.Utc),
+                    CheckoutTime = new DateTime(2025, 10, 20, 10, 2, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 19, 12, 0, 0, DateTimeKind.Utc),
                     Status = "Done",
                     GuestName = "Pham Thi D",
                     GuestPhone = "0123456785",
@@ -644,9 +764,9 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Booking
                 {
                     BookingId = 6,
-                    StartTime = new DateTime(2025, 10, 12, 14, 0, 0, DateTimeKind.Utc),
-                    EndTime = new DateTime(2025, 10, 12, 16, 0, 0, DateTimeKind.Utc),
-                    DateBook = new DateTime(2025, 10, 11, 12, 0, 0, DateTimeKind.Utc),
+                    StartTime = new DateTime(2025, 10, 18, 14, 0, 0, DateTimeKind.Utc),
+                    EndTime = new DateTime(2025, 10, 18, 16, 0, 0, DateTimeKind.Utc),
+                    DateBook = new DateTime(2025, 10, 17, 12, 0, 0, DateTimeKind.Utc),
                     Status = "Cancel",
                     GuestName = "Pham Thi D",
                     GuestPhone = "0123456785",
@@ -697,6 +817,31 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                     BookingDetailsId = 6,
                     TimeSlotId = 1,
                     BookingId = 6
+                },
+                // Additional booking details for comprehensive testing
+                new BookingDetails
+                {
+                    BookingDetailsId = 7,
+                    TimeSlotId = 3,
+                    BookingId = 7
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 8,
+                    TimeSlotId = 4,
+                    BookingId = 8
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 9,
+                    TimeSlotId = 5,
+                    BookingId = 9
+                },
+                new BookingDetails
+                {
+                    BookingDetailsId = 10,
+                    TimeSlotId = 6,
+                    BookingId = 10
                 }
             );
 
@@ -709,9 +854,43 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                     Status = "Success",
                     PaymentMethod = "Cash",
                     Description = "Payment on checkout",
-                    CreatedDate = new DateTime(2024, 1, 10, 10, 2, 0, DateTimeKind.Utc),
+                    CreatedDate = new DateTime(2025, 10, 25, 10, 2, 0, DateTimeKind.Utc),
                     WalletId = 5,
                     BookingId = 1
+                },
+                // Additional transactions for comprehensive testing
+                new Transaction
+                {
+                    TransactionId = 2,
+                    Price = 20000m,
+                    Status = "Success",
+                    PaymentMethod = "VnPay",
+                    Description = "Online payment for booking",
+                    CreatedDate = new DateTime(2025, 10, 30, 9, 0, 0, DateTimeKind.Utc),
+                    WalletId = 5,
+                    BookingId = 8
+                },
+                new Transaction
+                {
+                    TransactionId = 3,
+                    Price = 25000m,
+                    Status = "Success",
+                    PaymentMethod = "Cash",
+                    Description = "Payment on checkout",
+                    CreatedDate = new DateTime(2025, 10, 27, 16, 0, 0, DateTimeKind.Utc),
+                    WalletId = 5,
+                    BookingId = 10
+                },
+                new Transaction
+                {
+                    TransactionId = 4,
+                    Price = 10000m,
+                    Status = "Pending",
+                    PaymentMethod = "VnPay",
+                    Description = "Partial payment for overtime booking",
+                    CreatedDate = new DateTime(2025, 10, 28, 12, 0, 0, DateTimeKind.Utc),
+                    WalletId = 5,
+                    BookingId = 9
                 }
             );
 
@@ -720,9 +899,28 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                 new Bill
                 {
                     BillId = 1,
-                    Time = new DateTime(2024, 1, 10, 10, 5, 0, DateTimeKind.Utc),
+                    Time = new DateTime(2025, 10, 25, 10, 5, 0, DateTimeKind.Utc),
                     Status = "Paid",
                     Price = 30000m,
+                    BusinessId = 1,
+                    WalletId = 5
+                },
+                // Additional bills for comprehensive testing
+                new Bill
+                {
+                    BillId = 2,
+                    Time = new DateTime(2025, 10, 27, 16, 5, 0, DateTimeKind.Utc),
+                    Status = "Paid",
+                    Price = 25000m,
+                    BusinessId = 1,
+                    WalletId = 5
+                },
+                new Bill
+                {
+                    BillId = 3,
+                    Time = new DateTime(2025, 10, 30, 9, 5, 0, DateTimeKind.Utc),
+                    Status = "Chờ_Thanh_Toán",
+                    Price = 20000m,
                     BusinessId = 1,
                     WalletId = 5
                 }
@@ -735,7 +933,7 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
                     ApproveParkingId = 1,
                     Note = "Giám sát hiện trường",
                     NoteForAdmin = "Hồ sơ đạt yêu cầu",
-                    CreatedDate = new DateTime(2024, 1, 5, 9, 0, 0, DateTimeKind.Utc),
+                    CreatedDate = new DateTime(2025, 10, 20, 9, 0, 0, DateTimeKind.Utc),
                     Status = "Approved",
                     StaffId = 3, // Staff user
                     ParkingId = 1
@@ -827,9 +1025,275 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
             await SeedParkingSlotsAsync();
             await SeedParkingPricesAsync();
             await SeedParkingHasPricesAsync();
+            await SeedVehicleInforsAsync();
             await SeedWalletsAsync();
+            await SeedTimeSlotsAsync();
+            await SeedBookingsAsync();
+            await SeedTransactionsAsync();
+            await SeedBillsAsync();
+            await SeedApproveParkingsAsync();
 
             await SaveChangesAsync();
+        }
+
+        private async Task SeedBookingsAsync()
+        {
+            if (!await Bookings.AnyAsync())
+            {
+                var bookings = new List<Booking>
+                {
+                    new Booking
+                    {
+                        BookingId = 1,
+                        StartTime = new DateTime(2025, 10, 25, 8, 0, 0, DateTimeKind.Utc),
+                        EndTime = new DateTime(2025, 10, 25, 10, 0, 0, DateTimeKind.Utc),
+                        CheckinTime = new DateTime(2025, 10, 25, 8, 5, 0, DateTimeKind.Utc),
+                        CheckoutTime = new DateTime(2025, 10, 25, 10, 2, 0, DateTimeKind.Utc),
+                        DateBook = new DateTime(2025, 10, 24, 12, 0, 0, DateTimeKind.Utc),
+                        Status = "Done",
+                        GuestName = "Pham Thi D",
+                        GuestPhone = "0123456785",
+                        TotalPrice = 30000m,
+                        QRImage = "https://via.placeholder.com/150",
+                        UnPaidMoney = 0m,
+                        IsRating = true,
+                        UserId = 5,
+                        VehicleInforId = 1
+                    },
+                    // Seed data for testing GET /api/customer-booking/upcomming
+                    new Booking
+                    {
+                        BookingId = 2,
+                        StartTime = new DateTime(2025, 10, 30, 9, 0, 0, DateTimeKind.Utc),
+                        EndTime = new DateTime(2025, 10, 30, 11, 0, 0, DateTimeKind.Utc),
+                        DateBook = new DateTime(2025, 10, 29, 12, 0, 0, DateTimeKind.Utc),
+                        Status = "Initial",
+                        GuestName = "Pham Thi D",
+                        GuestPhone = "0123456785",
+                        TotalPrice = 20000m,
+                        QRImage = "https://via.placeholder.com/150",
+                        UnPaidMoney = 0m,
+                        IsRating = false,
+                        UserId = 5,
+                        VehicleInforId = 1
+                    },
+                    new Booking
+                    {
+                        BookingId = 3,
+                        StartTime = new DateTime(2025, 10, 31, 14, 0, 0, DateTimeKind.Utc),
+                        EndTime = new DateTime(2025, 10, 31, 16, 0, 0, DateTimeKind.Utc),
+                        DateBook = new DateTime(2025, 10, 30, 12, 0, 0, DateTimeKind.Utc),
+                        Status = "Success",
+                        GuestName = "Pham Thi D",
+                        GuestPhone = "0123456785",
+                        TotalPrice = 25000m,
+                        QRImage = "https://via.placeholder.com/150",
+                        UnPaidMoney = 0m,
+                        IsRating = false,
+                        UserId = 5,
+                        VehicleInforId = 2
+                    },
+                    new Booking
+                    {
+                        BookingId = 4,
+                        StartTime = new DateTime(2025, 10, 28, 10, 0, 0, DateTimeKind.Utc),
+                        EndTime = new DateTime(2025, 10, 28, 12, 0, 0, DateTimeKind.Utc),
+                        CheckinTime = new DateTime(2025, 10, 28, 10, 5, 0, DateTimeKind.Utc),
+                        DateBook = new DateTime(2025, 10, 27, 12, 0, 0, DateTimeKind.Utc),
+                        Status = "Check_In",
+                        GuestName = "Pham Thi D",
+                        GuestPhone = "0123456785",
+                        TotalPrice = 15000m,
+                        QRImage = "https://via.placeholder.com/150",
+                        UnPaidMoney = 0m,
+                        IsRating = false,
+                        UserId = 5,
+                        VehicleInforId = 1
+                    },
+                    // Seed data for testing GET /api/customer-booking/activities
+                    new Booking
+                    {
+                        BookingId = 5,
+                        StartTime = new DateTime(2025, 10, 20, 8, 0, 0, DateTimeKind.Utc),
+                        EndTime = new DateTime(2025, 10, 20, 10, 0, 0, DateTimeKind.Utc),
+                        CheckinTime = new DateTime(2025, 10, 20, 8, 5, 0, DateTimeKind.Utc),
+                        CheckoutTime = new DateTime(2025, 10, 20, 10, 2, 0, DateTimeKind.Utc),
+                        DateBook = new DateTime(2025, 10, 19, 12, 0, 0, DateTimeKind.Utc),
+                        Status = "Done",
+                        GuestName = "Pham Thi D",
+                        GuestPhone = "0123456785",
+                        TotalPrice = 30000m,
+                        QRImage = "https://via.placeholder.com/150",
+                        UnPaidMoney = 0m,
+                        IsRating = true,
+                        UserId = 5,
+                        VehicleInforId = 1
+                    },
+                    new Booking
+                    {
+                        BookingId = 6,
+                        StartTime = new DateTime(2025, 10, 18, 14, 0, 0, DateTimeKind.Utc),
+                        EndTime = new DateTime(2025, 10, 18, 16, 0, 0, DateTimeKind.Utc),
+                        DateBook = new DateTime(2025, 10, 17, 12, 0, 0, DateTimeKind.Utc),
+                        Status = "Cancel",
+                        GuestName = "Pham Thi D",
+                        GuestPhone = "0123456785",
+                        TotalPrice = 0m,
+                        QRImage = "https://via.placeholder.com/150",
+                        UnPaidMoney = 0m,
+                        IsRating = false,
+                        UserId = 5,
+                        VehicleInforId = 2
+                    }
+                };
+
+                await Bookings.AddRangeAsync(bookings);
+            }
+        }
+
+        private async Task SeedVehicleInforsAsync()
+        {
+            if (!await VehicleInfors.AnyAsync())
+            {
+                var vehicleInfors = new List<VehicleInfor>
+                {
+                    new VehicleInfor
+                    {
+                        VehicleInforId = 1,
+                        LicensePlate = "29A1-12345",
+                        VehicleName = "Honda Wave RSX",
+                        Color = "Đỏ",
+                        UserId = 5,
+                        TrafficId = 1
+                    },
+                    new VehicleInfor
+                    {
+                        VehicleInforId = 2,
+                        LicensePlate = "30A1-67890",
+                        VehicleName = "Toyota Vios",
+                        Color = "Trắng",
+                        UserId = 5,
+                        TrafficId = 2
+                    }
+                };
+
+                await VehicleInfors.AddRangeAsync(vehicleInfors);
+            }
+        }
+
+        private async Task SeedTimeSlotsAsync()
+        {
+            if (!await TimeSlots.AnyAsync())
+            {
+                var timeSlots = new List<TimeSlot>
+                {
+                    new TimeSlot
+                    {
+                        TimeSlotId = 1,
+                        StartTime = new DateTime(2025, 10, 25, 6, 0, 0),
+                        EndTime = new DateTime(2025, 10, 25, 18, 0, 0),
+                        Status = "Active",
+                        CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                        ParkingSlotId = 1
+                    },
+                    new TimeSlot
+                    {
+                        TimeSlotId = 2,
+                        StartTime = new DateTime(2025, 10, 25, 18, 0, 0),
+                        EndTime = new DateTime(2025, 10, 26, 6, 0, 0),
+                        Status = "Active",
+                        CreatedDate = new DateTime(2025, 10, 25, 0, 0, 0, DateTimeKind.Utc),
+                        ParkingSlotId = 1
+                    }
+                };
+
+                await TimeSlots.AddRangeAsync(timeSlots);
+            }
+        }
+
+        private async Task SeedTransactionsAsync()
+        {
+            if (!await Transactions.AnyAsync())
+            {
+                var transactions = new List<Transaction>
+                {
+                    new Transaction
+                    {
+                        TransactionId = 1,
+                        Price = 30000m,
+                        Status = "Success",
+                        PaymentMethod = "Cash",
+                        Description = "Payment on checkout",
+                        CreatedDate = new DateTime(2025, 10, 25, 10, 2, 0, DateTimeKind.Utc),
+                        WalletId = 5,
+                        BookingId = 1
+                    }
+                };
+
+                await Transactions.AddRangeAsync(transactions);
+            }
+        }
+
+        private async Task SeedBillsAsync()
+        {
+            if (!await Bills.AnyAsync())
+            {
+                var bills = new List<Bill>
+                {
+                    new Bill
+                    {
+                        BillId = 1,
+                        Time = new DateTime(2025, 10, 25, 10, 5, 0, DateTimeKind.Utc),
+                        Status = "Paid",
+                        Price = 30000m,
+                        BusinessId = 1,
+                        WalletId = 5
+                    },
+                    // Additional bills for comprehensive testing
+                    new Bill
+                    {
+                        BillId = 2,
+                        Time = new DateTime(2025, 10, 27, 16, 5, 0, DateTimeKind.Utc),
+                        Status = "Paid",
+                        Price = 25000m,
+                        BusinessId = 1,
+                        WalletId = 5
+                    },
+                    new Bill
+                    {
+                        BillId = 3,
+                        Time = new DateTime(2025, 10, 30, 9, 5, 0, DateTimeKind.Utc),
+                        Status = "Chờ_Thanh_Toán",
+                        Price = 20000m,
+                        BusinessId = 1,
+                        WalletId = 5
+                    }
+                };
+
+                await Bills.AddRangeAsync(bills);
+            }
+        }
+
+        private async Task SeedApproveParkingsAsync()
+        {
+            if (!await ApproveParkings.AnyAsync())
+            {
+                var approveParkings = new List<ApproveParking>
+                {
+                    new ApproveParking
+                    {
+                        ApproveParkingId = 1,
+                        Note = "Giám sát hiện trường",
+                        NoteForAdmin = "Hồ sơ đạt yêu cầu",
+                        CreatedDate = new DateTime(2025, 10, 20, 9, 0, 0, DateTimeKind.Utc),
+                        Status = "Approved",
+                        StaffId = 3, // Staff user
+                        ParkingId = 1
+                    }
+                };
+
+                await ApproveParkings.AddRangeAsync(approveParkings);
+            }
         }
 
         private async Task SeedTrafficAsync()
