@@ -488,8 +488,7 @@ namespace Parking.FindingSlotManagement.Infrastructure.Repositories
                                                      .ThenInclude(x => x.Floor)
                                                      .ThenInclude(x => x.Parking)
                                                  .Where(x => x.UserId == userId && 
-                                                       !x.Status.Equals(BookingStatus.Done.ToString()) && 
-                                                       !x.Status.Equals(BookingStatus.Cancel.ToString()))
+                                                       x.Status.Equals(BookingStatus.Initial.ToString()))
                                                  .ToListAsync();
             if (!booking.Any())
             {
@@ -508,8 +507,8 @@ namespace Parking.FindingSlotManagement.Infrastructure.Repositories
                                                      .ThenInclude(x => x.Parkingslot)
                                                      .ThenInclude(x => x.Floor)
                                                      .ThenInclude(x => x.Parking)
-                                                 .Where(x => x.UserId == userId && x.Status.Equals(BookingStatus.Done.ToString()) ||
-                                                 x.UserId == userId && x.Status.Equals(BookingStatus.Cancel.ToString())).ToListAsync();
+                                                 .Where(x => x.UserId == userId)
+                                                 .ToListAsync();
             if (!booking.Any())
             {
                 return null;

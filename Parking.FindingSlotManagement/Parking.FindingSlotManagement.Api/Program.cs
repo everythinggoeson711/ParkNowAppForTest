@@ -76,11 +76,22 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     // Add server URL for proper API testing in Swagger
-    c.AddServer(new OpenApiServer
+    if (builder.Environment.IsDevelopment())
     {
-        Url = "http://103.56.161.75",
-        Description = "Production Server"
-    });
+        c.AddServer(new OpenApiServer
+        {
+            Url = "https://localhost:7071",
+            Description = "Development Server"
+        });
+    }
+    else
+    {
+        c.AddServer(new OpenApiServer
+        {
+            Url = "http://103.56.161.75",
+            Description = "Production Server"
+        });
+    }
 
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
@@ -124,6 +135,8 @@ string[] urlCors = new string[]
 {
     "http://localhost:3000",
     "http://localhost:3001",
+    "http://localhost:5178",
+    "https://localhost:7071",
     "https://deploy-react-app-to-azure.vercel.app", 
     "https://park-z-manager-web.vercel.app", 
     "https://parkz-admin-web-five.vercel.app",
