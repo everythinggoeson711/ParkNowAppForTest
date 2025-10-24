@@ -39,14 +39,33 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Qu
                     };
                 }
 
+                // Defensive null checks for navigation properties
+                var bookingDetail = booking.BookingDetails?.FirstOrDefault();
+                var timeSlot = bookingDetail?.TimeSlot;
+                var parkingSlot = timeSlot?.Parkingslot;
+                var floor = parkingSlot?.Floor;
+                var parking = floor?.Parking;
+
+                // Check if essential data is available
+                if (bookingDetail == null || timeSlot == null || parkingSlot == null || 
+                    floor == null || parking == null)
+                {
+                    return new ServiceResponse<GetBookingDetailsResponse>
+                    {
+                        Message = "Thông tin booking chưa đầy đủ",
+                        StatusCode = 200,
+                        Success = false,
+                    };
+                }
+
                 var response = new GetBookingDetailsResponse
                 {
                     BookingDetails = _mapper.Map<BookingDetailsDto>(booking),
                     User = _mapper.Map<UserBookingDto>(booking.User),
                     VehicleInfor = _mapper.Map<VehicleInforDtoos>(booking.VehicleInfor),
-                    ParkingSlotWithBookingDetailDto = _mapper.Map<ParkingSlotWithBookingDetailDto>(booking.BookingDetails.FirstOrDefault().TimeSlot.Parkingslot),
-                    FloorWithBookingDetailDto = _mapper.Map<FloorWithBookingDetailDto>(booking.BookingDetails.FirstOrDefault().TimeSlot.Parkingslot.Floor),
-                    ParkingWithBookingDetailDto = _mapper.Map<ParkingWithBookingDetailDto>(booking.BookingDetails.FirstOrDefault().TimeSlot.Parkingslot.Floor.Parking),
+                    ParkingSlotWithBookingDetailDto = _mapper.Map<ParkingSlotWithBookingDetailDto>(parkingSlot),
+                    FloorWithBookingDetailDto = _mapper.Map<FloorWithBookingDetailDto>(floor),
+                    ParkingWithBookingDetailDto = _mapper.Map<ParkingWithBookingDetailDto>(parking),
                     TransactionWithBookingDetailDtos = _mapper.Map<List<TransactionWithBookingDetailDto>>(booking.Transactions)
                 };
 

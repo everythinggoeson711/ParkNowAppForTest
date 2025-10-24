@@ -45,6 +45,7 @@ namespace Parking.FindingSlotManagement.Infrastructure.Persistences
         public DbSet<BookingDetails> BookingDetails { get; set; }
         public DbSet<ConflictRequest> ConflictRequests { get; set; }
         public DbSet<OTP> OTPs { get; set; } = null!;
+        public DbSet<SepayWebhookTransaction> SepayWebhookTransactions { get; set; } = null!;
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

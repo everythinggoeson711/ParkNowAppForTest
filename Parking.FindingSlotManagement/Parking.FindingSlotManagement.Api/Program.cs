@@ -63,6 +63,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //for appear summary
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "ParkZ Parking Management API",
+        Version = "v1",
+        Description = "API for Parking Finding and Slot Management System",
+        Contact = new OpenApiContact
+        {
+            Name = "ParkZ Team",
+            Email = "support@parkz.com"
+        }
+    });
+
+    // Add server URL for proper API testing in Swagger
+    c.AddServer(new OpenApiServer
+    {
+        Url = "http://103.56.161.75",
+        Description = "Production Server"
+    });
 
     c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
@@ -150,10 +168,14 @@ app.UseSwagger();
 
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("v1/swagger.json", "ParkZ API V1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "ParkZ API V1");
+    c.RoutePrefix = "swagger";
+    c.DocumentTitle = "ParkZ API Documentation";
+    c.DefaultModelsExpandDepth(-1); // Hide schemas section by default
 });
 
-app.UseHttpsRedirection();
+// Comment out HTTPS redirection for HTTP-only deployment
+// app.UseHttpsRedirection();
 
 app.UseCors();
 app.UseRouting();

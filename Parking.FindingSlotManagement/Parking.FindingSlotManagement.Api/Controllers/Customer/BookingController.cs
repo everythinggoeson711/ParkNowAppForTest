@@ -103,11 +103,16 @@ namespace Parking.FindingSlotManagement.Api.Controllers.Customer
         /// <remark>
         /// SignalR: CustomerCreateBookingSuccess, LoadHistoryInManager
         /// </remark>
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<int>>> CreateBooking([FromBody] CreateBookingCommand command)
         {
             try
             {
+                // Always get UserId from JWT token for security
+                var userId = HttpContext.GetUserId();
+                command.BookingDto.UserId = userId;
+                
                 var res = await _mediator.Send(command);
                 if (res.Message == "Thành công")
                 {
@@ -119,15 +124,14 @@ namespace Parking.FindingSlotManagement.Api.Controllers.Customer
             }
             catch (Exception ex)
             {
-                //IEnumerable<string> list1 = new List<string> { "Severity: Error" };
-                //string message = "";
-                //foreach (var item in list1)
-                //{
-                //    message = ex.Message.Replace(item, string.Empty);
-                //}
-                //var errorResponse = new ErrorResponseModel(ResponseCode.BadRequest, "Validation Error: " + message.Remove(0, 31));
-                //return StatusCode(500, ex.Message);
-                throw new Exception(ex.Message);
+                // Log the error and return a proper error response
+                var errorMessage = "An error occurred while processing the booking request: " + ex.Message;
+                return StatusCode(500, new ServiceResponse<int> 
+                { 
+                    Success = false, 
+                    StatusCode = 500, 
+                    Message = errorMessage 
+                });
             }
         }
         /// <summary>

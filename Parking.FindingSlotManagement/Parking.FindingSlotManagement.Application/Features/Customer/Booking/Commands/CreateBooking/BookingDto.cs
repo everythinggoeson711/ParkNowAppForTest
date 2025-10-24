@@ -16,6 +16,9 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
         public string? GuestPhone { get; set; }
         public string? PaymentMethod { get; set; }
         public int VehicleInforId { get; set; }
+        /// <summary>
+        /// UserId will be set from JWT token by the controller, not from client request
+        /// </summary>
         public int UserId { get; set; }
     }
 }

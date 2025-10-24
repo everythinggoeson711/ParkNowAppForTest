@@ -50,12 +50,25 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Qu
                 List<GetCustomerActivitiesResponse> lstReturn = new();
                 foreach (var booking in lstBooking)
                 {
+                    // Add null checks to prevent NullReferenceException
+                    var bookingDetail = booking.BookingDetails?.FirstOrDefault();
+                    var timeSlot = bookingDetail?.TimeSlot;
+                    var parkingSlot = timeSlot?.Parkingslot;
+                    var floor = parkingSlot?.Floor;
+                    var parking = floor?.Parking;
+                    
+                    // Skip this booking if any required data is missing
+                    if (bookingDetail == null || timeSlot == null || parkingSlot == null || floor == null || parking == null)
+                    {
+                        continue;
+                    }
+                    
                     var eachEntity = new GetCustomerActivitiesResponse
                     {
                         BookingSearchResult = _mapper.Map<BookingSearchResult>(booking),
                         VehicleInforSearchResult = _mapper.Map<VehicleInforSearchResult>(booking.VehicleInfor),
-                        ParkingSearchResult = _mapper.Map<ParkingSearchResult>(booking.BookingDetails.FirstOrDefault().TimeSlot.Parkingslot.Floor.Parking),
-                        ParkingSlotSearchResult = _mapper.Map<ParkingSlotSearchResult>(booking.BookingDetails.FirstOrDefault().TimeSlot.Parkingslot)
+                        ParkingSearchResult = _mapper.Map<ParkingSearchResult>(parking),
+                        ParkingSlotSearchResult = _mapper.Map<ParkingSlotSearchResult>(parkingSlot)
                     };
                     lstReturn.Add(eachEntity);
                 }

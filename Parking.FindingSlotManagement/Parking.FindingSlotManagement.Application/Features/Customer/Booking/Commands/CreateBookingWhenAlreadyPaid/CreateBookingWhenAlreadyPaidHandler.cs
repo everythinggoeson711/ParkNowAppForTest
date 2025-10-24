@@ -14,12 +14,9 @@ using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Commands.CreateBookingWhenAlreadyPaid
@@ -49,7 +46,7 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
         private readonly IBookingDetailsRepository _bookingDetailsRepository;
         private readonly ITransactionRepository _transactionRepository;
         private readonly IWalletRepository _walletRepository;
-        private readonly HttpClient _client;
+        private readonly ICloudinaryService _cloudinaryService;
 
         public CreateBookingWhenAlreadyPaidHandler(IBookingRepository bookingRepository,
             IParkingSlotRepository parkingSlotRepository,
@@ -69,7 +66,8 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
             ITimeSlotRepository timeSlotRepository,
             IBookingDetailsRepository bookingDetailsRepository,
             ITransactionRepository transactionRepository,
-            IWalletRepository walletRepository)
+            IWalletRepository walletRepository,
+            ICloudinaryService cloudinaryService)
         {
             _bookingRepository = bookingRepository;
             _parkingSlotRepository = parkingSlotRepository;
@@ -90,8 +88,7 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
             _bookingDetailsRepository = bookingDetailsRepository;
             _transactionRepository = transactionRepository;
             _walletRepository = walletRepository;
-            _client = new HttpClient();
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Client-ID", "886d0b92410e625");
+            _cloudinaryService = cloudinaryService;
         }
         public async Task<ServiceResponse<int>> Handle(CreateBookingWhenAlreadyPaidCommand request, CancellationToken cancellationToken)
         {
@@ -354,42 +351,23 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
 
         private async Task<string> UploadQRImagess(int bookingId)
         {
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            try
+            {
+                // Generate QR as PNG bytes using QRCoder without System.Drawing
+                var qrGenerator = new QRCodeGenerator();
+                var qrCodeData = qrGenerator.CreateQrCode($"pz-{bookingId}", QRCodeGenerator.ECCLevel.Q);
+                var pngQr = new PngByteQRCode(qrCodeData);
+                var qrBytes = pngQr.GetGraphic(20);
 
-            // Generate a QR code with the given data
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode("pz-"+bookingId.ToString(), QRCodeGenerator.ECCLevel.Q);
-
-            // Create a QR code object from the QR code data
-            QRCode qrCode = new QRCode(qrCodeData);
-
-            // Convert the QR code to a bitmap image
-            Bitmap qrCodeImage = qrCode.GetGraphic(20);
-            IFormFile file = ConvertToIFormFile(qrCodeImage, "qrCodeImage.jpg");
-            var ms = new MemoryStream();
-            await file.CopyToAsync(ms);
-            var content = new ByteArrayContent(ms.ToArray());
-            /*content.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);*/
-            var response = await _client.PostAsync("https://api.imgur.com/3/image", content);
-            response.EnsureSuccessStatusCode();
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<ImgurResponse>(responseContent);
-            return result.Data.Link;
-        }
-
-        private IFormFile ConvertToIFormFile(Bitmap bitmap, string fileName)
-        {
-            var stream = new MemoryStream();
-
-            // Save the bitmap to the stream using the desired image format
-            bitmap.Save(stream, ImageFormat.Jpeg);
-
-            // Reset the stream position to the beginning
-            stream.Position = 0;
-
-            // Create an IFormFile from the stream
-            var formFile = new FormFile(stream, 0, stream.Length, "qrCodeImage", fileName);
-
-            return formFile;
+                // Upload to Cloudinary
+                var imageUrl = await _cloudinaryService.UploadImageAsync(qrBytes, $"qr-{bookingId}.png", "parkz-qrcodes");
+                return imageUrl ?? string.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to upload QR code (already-paid) for booking {BookingId}", bookingId);
+                return string.Empty;
+            }
         }
     }
 }

@@ -84,7 +84,17 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.ParkingNea
                     foreach (var item2 in lstParkingHasPrice)
                     {
                         var timelineCurrent = await GetTimeLine(item2);
+                        if (timelineCurrent == null)
+                        {
+                            continue; // Skip if no timeline found
+                        }
+                        
                         var parkingPrice = await _parkingPriceRepository.GetById(item2.ParkingPriceId);
+                        if (parkingPrice == null)
+                        {
+                            continue; // Skip if no parking price found
+                        }
+                        
                         if (parkingPrice.TrafficId == 1)
                         {
                             parkingWithDistance = new ParkingWithDistance
@@ -95,8 +105,11 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.ParkingNea
                             };
                         }
                     }
-                        
-                    lst.Add(parkingWithDistance);
+                    
+                    if (parkingWithDistance != null && parkingWithDistance.Distance > 0)
+                    {
+                        lst.Add(parkingWithDistance);
+                    }
                 }
                 if (lst.Count() <= 0)
                 {
@@ -175,8 +188,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.ParkingNea
             {
                 var content = await response.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<dynamic>(content);
-                distance = (double)data.routes[0].distance;
-                return (distance / 1000); // convert to kilometers
+                
+                // Null safety check for OSRM response
+                if (data?.routes != null && data.routes.Count > 0 && data.routes[0]?.distance != null)
+                {
+                    distance = (double)data.routes[0].distance;
+                    return (distance / 1000); // convert to kilometers
+                }
             }
             return distance;
         }
