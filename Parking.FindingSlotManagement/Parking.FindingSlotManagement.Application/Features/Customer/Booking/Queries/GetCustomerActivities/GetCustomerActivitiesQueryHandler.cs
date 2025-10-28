@@ -57,18 +57,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Qu
                     var floor = parkingSlot?.Floor;
                     var parking = floor?.Parking;
                     
-                    // Skip this booking if any required data is missing
-                    if (bookingDetail == null || timeSlot == null || parkingSlot == null || floor == null || parking == null)
-                    {
-                        continue;
-                    }
-                    
+                    // Create response even if some data is missing (will be null in response)
                     var eachEntity = new GetCustomerActivitiesResponse
                     {
                         BookingSearchResult = _mapper.Map<BookingSearchResult>(booking),
                         VehicleInforSearchResult = _mapper.Map<VehicleInforSearchResult>(booking.VehicleInfor),
-                        ParkingSearchResult = _mapper.Map<ParkingSearchResult>(parking),
-                        ParkingSlotSearchResult = _mapper.Map<ParkingSlotSearchResult>(parkingSlot)
+                        ParkingSearchResult = parking != null ? _mapper.Map<ParkingSearchResult>(parking) : null,
+                        ParkingSlotSearchResult = parkingSlot != null ? _mapper.Map<ParkingSlotSearchResult>(parkingSlot) : null
                     };
                     lstReturn.Add(eachEntity);
                 }

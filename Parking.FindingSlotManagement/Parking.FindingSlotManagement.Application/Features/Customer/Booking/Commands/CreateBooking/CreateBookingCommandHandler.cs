@@ -304,7 +304,7 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
             }
 
             var entity = _mapper.Map<Domain.Entities.Booking>(request.BookingDto);
-            entity.Status = BookingStatus.Success.ToString();
+            entity.Status = BookingStatus.Initial.ToString();
             var floor = await _floorRepository.GetById(parkingSlot.FloorId!);
             var parkingId = floor.ParkingId;
             var parking = await _parkingRepository.GetById(parkingId!);
@@ -539,7 +539,7 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
             }
 
             var entity = _mapper.Map<Domain.Entities.Booking>(request.BookingDto);
-            entity.Status = BookingStatus.Success.ToString();
+            entity.Status = BookingStatus.Initial.ToString();
             var floor = await _floorRepository.GetById(parkingSlot.FloorId!);
             var parkingId = floor.ParkingId;
 
@@ -653,7 +653,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                     var bookedHours = entity.EndTime.Value - entity.StartTime;
                     var persent = bookedHours * 0.5;
                     var timeToCancel = entity.StartTime.Add(persent) - DateTime.UtcNow.AddHours(7);
-                    BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    
+                    // Only schedule job if timeToCancel is positive (in the future)
+                    if (timeToCancel.TotalMinutes > 0)
+                    {
+                        BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    }
+                    
                     return new ServiceResponse<int>
                     {
                         Data = entity.BookingId,
@@ -667,7 +673,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                     var bookedHours = entity.EndTime.Value - entity.StartTime;
                     var persent = bookedHours * 0.5;
                     var timeToCancel = entity.StartTime.Add(persent) - DateTime.UtcNow.AddHours(7);
-                    BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    
+                    // Only schedule job if timeToCancel is positive (in the future)
+                    if (timeToCancel.TotalMinutes > 0)
+                    {
+                        BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    }
+                    
                     return new ServiceResponse<int>
                     {
                         Data = entity.BookingId,
@@ -685,7 +697,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                     var bookedHours = entity.EndTime.Value - entity.StartTime;
                     var persent = bookedHours * 0.5;
                     var timeToCancel = entity.StartTime.Add(persent) - DateTime.UtcNow.AddHours(7);
-                    BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    
+                    // Only schedule job if timeToCancel is positive (in the future)
+                    if (timeToCancel.TotalMinutes > 0)
+                    {
+                        BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    }
+                    
                     return new ServiceResponse<int>
                     {
                         Data = entity.BookingId,
@@ -699,7 +717,12 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                     var bookedHours = entity.EndTime.Value - entity.StartTime;
                     var persent = bookedHours * 0.5;
                     var timeToCancel = entity.StartTime.Add(persent) - DateTime.UtcNow.AddHours(7);
-                    BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    
+                    // Only schedule job if timeToCancel is positive (in the future)
+                    if (timeToCancel.TotalMinutes > 0)
+                    {
+                        BackgroundJob.Schedule<IServiceManagement>(x => x.AutoCancelBookingWhenOverAllowTimeBooking(entity.BookingId), timeToCancel);
+                    }
                     return new ServiceResponse<int>
                     {
                         Data = entity.BookingId,
