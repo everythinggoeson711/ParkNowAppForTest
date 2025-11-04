@@ -202,6 +202,13 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                         
                     }
 
+                    // Kiểm tra các yếu tố liên quan trước khi tạo booking
+                    var checkResult = await CheckRelatedEntities(request.BookingDto.ParkingSlotId, request.BookingDto.StartTime, request.BookingDto.EndTime);
+                    if (!checkResult.Success)
+                    {
+                        return checkResult;
+                    }
+
                     // shecudle
                     if (paymentMethod.Equals(Domain.Enum.PaymentMethod.tra_truoc.ToString()))
                     {
@@ -231,6 +238,90 @@ namespace Parking.FindingSlotManagement.Application.Features.Customer.Booking.Co
                 {
                     throw new Exception(ex.Message);
                 }
+            }
+        }
+
+        // Phương thức mới để kiểm tra các yếu tố liên quan
+        private async Task<ServiceResponse<int>> CheckRelatedEntities(int parkingSlotId, DateTime startTime, DateTime endTime)
+        {
+            try
+            {
+                // Lấy parking slot
+                var parkingSlot = await _parkingSlotRepository.GetById(parkingSlotId);
+                if (parkingSlot == null)
+                {
+                    return new ServiceResponse<int>
+                    {
+                        Message = "Không tìm thấy chỗ đỗ xe.",
+                        Success = false,
+                        StatusCode = 404
+                    };
+                }
+
+                // Lấy floor
+                var floor = await _floorRepository.GetById(parkingSlot.FloorId);
+                if (floor == null)
+                {
+                    return new ServiceResponse<int>
+                    {
+                        Message = "Không tìm thấy tầng.",
+                        Success = false,
+                        StatusCode = 404
+                    };
+                }
+
+                // Lấy parking
+                var parking = await _parkingRepository.GetById(floor.ParkingId);
+                if (parking == null)
+                {
+                    return new ServiceResponse<int>
+                    {
+                        Message = "Không tìm thấy bãi đỗ xe.",
+                        Success = false,
+                        StatusCode = 404
+                    };
+                }
+
+                // Kiểm tra time slots có tồn tại cho khoảng thời gian được chọn không
+                var timeSlots = await _timeSlotRepository.GetAllTimeSlotsBooking(startTime, endTime, parkingSlotId);
+                if (timeSlots == null || !timeSlots.Any())
+                {
+                    return new ServiceResponse<int>
+                    {
+                        Message = "Không tìm thấy khung thời gian phù hợp cho khoảng thời gian đã chọn.",
+                        Success = false,
+                        StatusCode = 400
+                    };
+                }
+
+                // Kiểm tra xem tất cả time slots có trạng thái Available không
+                foreach (var timeSlot in timeSlots)
+                {
+                    if (timeSlot.Status != "Available")
+                    {
+                        return new ServiceResponse<int>
+                        {
+                            Message = "Một số khung thời gian đã được đặt.",
+                            Success = false,
+                            StatusCode = 400
+                        };
+                    }
+                }
+
+                return new ServiceResponse<int>
+                {
+                    Success = true,
+                    StatusCode = 200
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<int>
+                {
+                    Message = $"Lỗi khi kiểm tra thông tin liên quan: {ex.Message}",
+                    Success = false,
+                    StatusCode = 500
+                };
             }
         }
 
